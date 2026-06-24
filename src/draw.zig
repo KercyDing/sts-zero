@@ -1,8 +1,11 @@
 const impeller = @import("impeller");
 
-const App = @import("app.zig").App;
-const Canvas = @import("render/canvas.zig").Canvas;
 const config = @import("config");
+
+const App = @import("app.zig").App;
+const canvas_mod = @import("render/canvas.zig");
+const Canvas = canvas_mod.Canvas;
+const colors = @import("render/colors.zig");
 
 pub const SurfaceSize = struct {
     width: usize,
@@ -36,8 +39,7 @@ fn applyViewportScale(canvas: *Canvas, surface_size: SurfaceSize) void {
 
 fn drawApp(canvas: *Canvas, app: *const App) !void {
     // Root background in white.
-    canvas.paint.setColor(impeller.srgb(1.0, 1.0, 1.0, 1.0));
-    canvas.builder.drawPaint(canvas.paint.*);
+    canvas.clear(colors.white);
 
     // Draw scene.
     switch (app.scene) {
@@ -57,10 +59,13 @@ fn drawApp(canvas: *Canvas, app: *const App) !void {
 fn drawMainMenu(canvas: *Canvas, app: *const App) !void {
     _ = app;
 
-    canvas.paint.setColor(impeller.srgb(1.0, 0.0, 0.0, 1.0));
-    canvas.builder.drawRect(
-        impeller.rect(160.0, 90.0, 960.0, 540.0),
-        canvas.paint.*,
+    canvas.roundedRect(
+        160.0,
+        90.0,
+        960.0,
+        540.0,
+        24.0,
+        colors.red,
     );
 }
 
@@ -68,10 +73,13 @@ fn drawMainMenu(canvas: *Canvas, app: *const App) !void {
 fn drawMap(canvas: *Canvas, app: *const App) !void {
     _ = app;
 
-    canvas.paint.setColor(impeller.srgb(0.0, 1.0, 0.0, 1.0));
-    canvas.builder.drawRect(
-        impeller.rect(160.0, 90.0, 960.0, 540.0),
-        canvas.paint.*,
+    canvas.roundedRect(
+        160.0,
+        90.0,
+        960.0,
+        540.0,
+        24.0,
+        colors.green,
     );
 }
 
@@ -79,9 +87,12 @@ fn drawMap(canvas: *Canvas, app: *const App) !void {
 fn drawCombat(canvas: *Canvas, app: *const App) !void {
     _ = app;
 
-    canvas.paint.setColor(impeller.srgb(0.0, 0.0, 1.0, 1.0));
-    canvas.builder.drawRect(
-        impeller.rect(160.0, 90.0, 960.0, 540.0),
-        canvas.paint.*,
+    canvas.roundedRect(
+        160.0,
+        90.0,
+        960.0,
+        540.0,
+        24.0,
+        colors.blue,
     );
 }

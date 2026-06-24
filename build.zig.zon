@@ -3,8 +3,8 @@
     .version = "0.17.0-dev.387+31f157d80",
     .dependencies = .{
         .impeller_zig = .{
-            .url = "git+https://github.com/impeller-interop/impeller-zig?ref=main#a969f9e3dc01324555609de06e5dbda291fd31ab",
-            .hash = "impeller_zig-0.0.1-GYR4Wtv9AQDJDS63UbZdITk-RioTRPzerRqY4LWy5iam",
+            .url = "git+https://github.com/impeller-interop/impeller-zig?ref=main#a23bb88760a5758fbd6392e544bf12f695ab6b99",
+            .hash = "impeller_zig-0.0.1-GYR4Wtz9AQCJclgc8GJ9NZksZFt30EmcBHqA67po7cLw",
         },
         // Temporary use ellie_leathe/zig-sdl3 master branch.
         // The branch used Zig "0.17.0-dev.389",
