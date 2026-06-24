@@ -5,7 +5,6 @@ pub fn configPlatform() !void {}
 
 pub fn windowFlags() sdl3.video.Window.Flags {
     return .{
-        .resizable = true,
         .metal = true,
         .high_pixel_density = true,
     };

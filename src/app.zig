@@ -1,14 +1,22 @@
+const std = @import("std");
 const sdl3 = @import("sdl3");
 const events = sdl3.events;
 
+/// The game's scene.
+pub const Scene = enum {
+    main_menu,
+    map,
+    combat,
+};
+
 pub const App = struct {
     quit: bool = false,
+    scene: Scene = .main_menu,
+
     input: Input = .{},
 
     pub fn init() @This() {
-        return .{
-            .quit = false,
-        };
+        return .{};
     }
 
     pub fn beginFrame(self: *App) void {
@@ -16,69 +24,89 @@ pub const App = struct {
     }
 
     pub fn update(self: *App, dt: f32) void {
-        _ = self;
+        switch (self.scene) {
+            .main_menu => self.updateMainMenu(dt),
+            .map => self.updateMap(dt),
+            .combat => self.updateCombat(dt),
+        }
+    }
+
+    fn updateMainMenu(self: *App, dt: f32) void {
         _ = dt;
+
+        if (self.input.mouse_pressed) {
+            self.setScene(.map);
+        }
+    }
+
+    fn updateMap(self: *App, dt: f32) void {
+        _ = dt;
+
+        if (self.input.mouse_pressed) {
+            self.setScene(.combat);
+        }
+    }
+
+    fn updateCombat(self: *App, dt: f32) void {
+        _ = dt;
+
+        if (self.input.esc_pressed) {
+            self.setScene(.main_menu);
+        }
+    }
+
+    pub fn setScene(self: *App, next: Scene) void {
+        if (self.scene == next) return;
+
+        std.log.debug("Scene: {s} -> {s}", .{
+            @tagName(self.scene),
+            @tagName(next),
+        });
+
+        self.scene = next;
     }
 
     pub fn handleEvent(self: *App, event: events.Event) void {
         switch (event) {
-            .quit, .terminating => {
-                self.quit = true;
+            .quit, .terminating => self.quit = true,
+
+            .mouse_motion => |motion| {
+                self.input.mouse_x = motion.x;
+                self.input.mouse_y = motion.y;
             },
+
+            .mouse_button_down => {
+                self.input.mouse_down = true;
+                self.input.mouse_pressed = true;
+            },
+
+            .mouse_button_up => {
+                self.input.mouse_down = false;
+                self.input.mouse_released = true;
+            },
+
             .key_down => |key| {
                 self.handleKeyDown(key);
             },
-            .key_up => |key| {
-                self.handleKeyUp(key);
-            },
-            .mouse_motion => |motion| {
-                self.handleMouseMotion(motion);
-            },
-            .mouse_button_down => |button| {
-                self.handleMouseButtonDown(button);
-            },
-            .mouse_button_up => |button| {
-                self.handleMouseButtonUp(button);
-            },
-            .mouse_wheel => |wheel| {
-                self.handleMouseWheel(wheel);
-            },
+
             else => {},
         }
     }
 
     pub fn handleKeyDown(self: *App, key: events.Keyboard) void {
-        _ = self;
-        _ = key;
-    }
+        if (key.repeat) return;
 
-    pub fn handleKeyUp(self: *App, key: events.Keyboard) void {
-        _ = self;
-        _ = key;
-    }
-
-    pub fn handleMouseMotion(self: *App, motion: events.MouseMotion) void {
-        _ = self;
-        _ = motion;
-    }
-
-    pub fn handleMouseButtonDown(self: *App, button: events.MouseButton) void {
-        _ = self;
-        _ = button;
-    }
-
-    pub fn handleMouseButtonUp(self: *App, button: events.MouseButton) void {
-        _ = self;
-        _ = button;
-    }
-
-    pub fn handleMouseWheel(self: *App, wheel: events.MouseWheel) void {
-        _ = self;
-        _ = wheel;
+        if (key.key) |kc| {
+            switch (kc) {
+                .escape => self.input.esc_pressed = true,
+                else => {},
+            }
+        }
     }
 };
 
-const Input = struct {
+/// Input event.
+pub const Input = struct {
     mouse_x: f32 = 0,
     mouse_y: f32 = 0,
 

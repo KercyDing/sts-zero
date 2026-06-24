@@ -4,11 +4,10 @@ const backend = @import("backend");
 const sdl3 = @import("sdl3");
 
 const app_mod = @import("app.zig");
-const scene = @import("scene.zig");
+const config = @import("config.zig");
+const draw = @import("draw.zig");
 
-const fps = 60;
-const real_width = 1280;
-const real_height = 720;
+pub const fps = 60;
 
 const WindowSize = struct {
     width: usize,
@@ -39,13 +38,10 @@ pub fn main() !void {
     var renderer = try backend.Renderer.init(window);
     defer renderer.deinit();
 
-    var app_scene = try scene.createScene(renderer.context());
-    defer app_scene.deinit();
-
     while (!app.quit) {
         app.beginFrame();
 
-        const dt = fps_capper.delay();
+        const dt = @min(fps_capper.delay(), 1.0 / 15.0);
 
         while (sdl3.events.poll()) |event| {
             app.handleEvent(event);
@@ -56,7 +52,11 @@ pub fn main() !void {
         var frame_surface = try renderer.acquireSurface(window);
         defer frame_surface.deinit();
 
-        try frame_surface.draw(app_scene.display_list);
+        const drawable_size = try window.getSizeInPixels();
+        try frame_surface.draw(try draw.buildDisplayList(&app, .{
+            .width = drawable_size[0],
+            .height = drawable_size[1],
+        }));
         try frame_surface.present();
     }
 }
@@ -71,7 +71,7 @@ fn scaledWindowSize(display_scale: f32) WindowSize {
     const scale = if (display_scale > 1.0) display_scale else 1.0;
 
     return .{
-        .width = @intFromFloat(@round(@as(f32, @floatFromInt(real_width)) * scale)),
-        .height = @intFromFloat(@round(@as(f32, @floatFromInt(real_height)) * scale)),
+        .width = @intFromFloat(@round(config.logical_width * scale)),
+        .height = @intFromFloat(@round(config.logical_height * scale)),
     };
 }
