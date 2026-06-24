@@ -7,8 +7,6 @@ const app_mod = @import("app.zig");
 const config = @import("config.zig");
 const draw = @import("draw.zig");
 
-pub const fps = 60;
-
 const WindowSize = struct {
     width: usize,
     height: usize,
@@ -32,7 +30,9 @@ pub fn main() !void {
     );
     defer window.deinit();
 
-    var fps_capper = sdl3.extras.FramerateCapper(f32){ .mode = .{ .limited = fps } };
+    var fps_capper = sdl3.extras.FramerateCapper(f32){
+        .mode = .{ .limited = config.fps },
+    };
     var app = app_mod.App.init();
 
     var renderer = try backend.Renderer.init(window);
