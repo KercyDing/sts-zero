@@ -7,8 +7,8 @@ const app_mod = @import("app.zig");
 const scene = @import("scene.zig");
 
 const fps = 60;
-const logical_width = 640;
-const logical_height = 480;
+const real_width = 1280;
+const real_height = 720;
 
 const WindowSize = struct {
     width: usize,
@@ -71,7 +71,7 @@ fn scaledWindowSize(display_scale: f32) WindowSize {
     const scale = if (display_scale > 1.0) display_scale else 1.0;
 
     return .{
-        .width = @intFromFloat(@round(@as(f32, @floatFromInt(logical_width)) * scale)),
-        .height = @intFromFloat(@round(@as(f32, @floatFromInt(logical_height)) * scale)),
+        .width = @intFromFloat(@round(@as(f32, @floatFromInt(real_width)) * scale)),
+        .height = @intFromFloat(@round(@as(f32, @floatFromInt(real_height)) * scale)),
     };
 }
