@@ -1,0 +1,77 @@
+const std = @import("std");
+
+const backend = @import("backend");
+const sdl3 = @import("sdl3");
+
+const app_mod = @import("app.zig");
+const scene = @import("scene.zig");
+
+const fps = 60;
+const logical_width = 640;
+const logical_height = 480;
+
+const WindowSize = struct {
+    width: usize,
+    height: usize,
+};
+
+pub fn main() !void {
+    defer sdl3.shutdown();
+
+    try backend.configPlatform();
+
+    const init_flag = sdl3.InitFlags{ .video = true };
+    try sdl3.init(init_flag);
+    defer sdl3.quit(init_flag);
+
+    const window_size = try initialWindowSize();
+    const window = try sdl3.video.Window.init(
+        "STS-Zero",
+        window_size.width,
+        window_size.height,
+        backend.windowFlags(),
+    );
+    defer window.deinit();
+
+    var fps_capper = sdl3.extras.FramerateCapper(f32){ .mode = .{ .limited = fps } };
+    var app = app_mod.App.init();
+
+    var renderer = try backend.Renderer.init(window);
+    defer renderer.deinit();
+
+    var app_scene = try scene.createScene(renderer.context());
+    defer app_scene.deinit();
+
+    while (!app.quit) {
+        app.beginFrame();
+
+        const dt = fps_capper.delay();
+
+        while (sdl3.events.poll()) |event| {
+            app.handleEvent(event);
+        }
+
+        app.update(dt);
+
+        var frame_surface = try renderer.acquireSurface(window);
+        defer frame_surface.deinit();
+
+        try frame_surface.draw(app_scene.display_list);
+        try frame_surface.present();
+    }
+}
+
+fn initialWindowSize() !WindowSize {
+    const primary_display = try sdl3.video.Display.getPrimaryDisplay();
+    const content_scale = try primary_display.getContentScale();
+    return scaledWindowSize(content_scale);
+}
+
+fn scaledWindowSize(display_scale: f32) WindowSize {
+    const scale = if (display_scale > 1.0) display_scale else 1.0;
+
+    return .{
+        .width = @intFromFloat(@round(@as(f32, @floatFromInt(logical_width)) * scale)),
+        .height = @intFromFloat(@round(@as(f32, @floatFromInt(logical_height)) * scale)),
+    };
+}

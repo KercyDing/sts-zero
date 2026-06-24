@@ -1,0 +1,6 @@
+.zig-cache
+zig-out
+zig-pkg
+
+# Trash
+.DS_Store

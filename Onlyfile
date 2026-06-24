@@ -1,0 +1,31 @@
+!label false
+
+% Debug Build
+b():
+    rm -rf zig-out
+    zig build
+    echo 'Done.'
+
+% Debug Run
+r():
+    zig build run
+
+% Test
+t():
+    zig build test
+    echo 'Done.'
+
+% Format
+f():
+    zig fmt src
+    echo 'Done.'
+
+% Clean Cache, Output
+c():
+    rm -rf .zig-cache zig-out
+    echo 'Done.'
+
+% Publish Release
+p():
+    rm -rf zig-out
+    zig build run -Doptimize=ReleaseSafe -Dstrip=true

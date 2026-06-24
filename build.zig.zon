@@ -1,0 +1,20 @@
+.{
+    .name = .sts_zero,
+    .version = "0.17.0-dev.387+31f157d80",
+    .dependencies = .{
+        .impeller_zig = .{
+            .url = "git+https://github.com/impeller-interop/impeller-zig?ref=main#a969f9e3dc01324555609de06e5dbda291fd31ab",
+            .hash = "impeller_zig-0.0.1-GYR4Wtv9AQDJDS63UbZdITk-RioTRPzerRqY4LWy5iam",
+        },
+        // Temporary use ellie_leathe/zig-sdl3 master branch.
+        // The branch used Zig "0.17.0-dev.389",
+        // it solved the problem I've found on my cachyOS of Zig 0.16.0
+        // SFrame problem (https://codeberg.org/ziglang/zig/issues/31272)
+        .sdl3 = .{
+            .url = "git+https://codeberg.org/ellie_leathe/zig-sdl3?ref=master#33c2a4af71c7efa3265968048558278590961291",
+            .hash = "sdl3-0.2.0-NmT1Q1aOJwDe-q8CEDXNg-mi3yf8RU-ghQY94lQ3esmA",
+        },
+    },
+    .paths = .{ "build.zig", "build.zig.zon", "src", "assets", "README.md" },
+    .fingerprint = 0xe2b5b4d97a051b0a,
+}
