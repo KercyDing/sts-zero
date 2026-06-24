@@ -1,4 +1,4 @@
-## STS-ZERO
+# sts-zero
 
 A game dev made with [sdl3](https://codeberg.org/7Games/zig-sdl3) and [impeller-zig](https://github.com/impeller-interop/impeller-zig).
 
