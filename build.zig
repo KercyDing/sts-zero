@@ -27,15 +27,24 @@ pub fn build(b: *std.Build) void {
         },
     });
 
+    const config_mod = b.createModule(.{
+        .root_source_file = b.path("src/config.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
         .strip = strip,
         .imports = &.{
-            .{ .name = "backend", .module = backend_mod },
+            // Third party
             .{ .name = "impeller", .module = impeller_dep.module("impeller") },
             .{ .name = "sdl3", .module = sdl3_dep.module("sdl3") },
+            // Mods
+            .{ .name = "backend", .module = backend_mod },
+            .{ .name = "config", .module = config_mod },
         },
     });
     const exe = b.addExecutable(.{

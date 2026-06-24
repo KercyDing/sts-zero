@@ -4,7 +4,7 @@ const backend = @import("backend");
 const sdl3 = @import("sdl3");
 
 const app_mod = @import("app.zig");
-const config = @import("config.zig");
+const config = @import("config");
 const draw = @import("draw.zig");
 
 const WindowSize = struct {

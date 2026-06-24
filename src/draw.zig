@@ -2,7 +2,7 @@ const impeller = @import("impeller");
 
 const App = @import("app.zig").App;
 const Canvas = @import("render/canvas.zig").Canvas;
-const config = @import("config.zig");
+const config = @import("config");
 
 pub const SurfaceSize = struct {
     width: usize,
