@@ -1,6 +1,9 @@
 const impeller = @import("impeller");
 
+const font = @import("font");
+
 const colors = @import("colors.zig");
+const text_mod = @import("text.zig");
 
 pub const Canvas = struct {
     builder: *impeller.display_list.Builder,
@@ -12,7 +15,7 @@ pub const Canvas = struct {
         self.builder.drawPaint(self.paint.*);
     }
 
-    /// Draw a rectangle with position and size in color.
+    /// Draw a rectangle at position.
     pub fn rect(
         self: *Canvas,
         x: f32,
@@ -28,7 +31,7 @@ pub const Canvas = struct {
         );
     }
 
-    /// Draw a rounded rectangle with position and size in color.
+    /// Draw a rounded rectangle at position.
     pub fn roundedRect(
         self: *Canvas,
         x: f32,
@@ -86,18 +89,25 @@ pub const Canvas = struct {
         );
     }
 
-    /// Draw a prepared paragraph at position.
+    /// Draw a text at position.
     ///
-    /// This is a low-level helper. Higher-level text drawing should build the
-    /// paragraph from text, font, size, width, and color before calling this.
-    pub fn drawParagraph(
+    /// This is a high-level helper.
+    /// The underlying logic is in "text.zig".
+    pub fn text(
         self: *Canvas,
-        para: impeller.Paragraph,
+        content: []const u8,
+        family_name: font.Family,
+        options: text_mod.TextOptions,
         x: f32,
         y: f32,
-    ) void {
+    ) !void {
+        var text_renderer = try text_mod.TextRenderer.init(family_name);
+        defer text_renderer.deinit();
+
+        const paragraph = try text_renderer.buildParagraph(content, options);
+
         self.builder.drawParagraph(
-            para,
+            paragraph,
             impeller.point(x, y),
         );
     }

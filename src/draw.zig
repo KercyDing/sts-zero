@@ -38,8 +38,8 @@ fn applyViewportScale(canvas: *Canvas, surface_size: SurfaceSize) void {
 }
 
 fn drawApp(canvas: *Canvas, app: *const App) !void {
-    // Root background in white.
-    canvas.clear(colors.white);
+    // Root background.
+    canvas.clear(colors.bg);
 
     // Draw scene.
     switch (app.scene) {
@@ -55,7 +55,6 @@ fn drawApp(canvas: *Canvas, app: *const App) !void {
     }
 }
 
-// Main menu of the game.
 fn drawMainMenu(canvas: *Canvas, app: *const App) !void {
     _ = app;
 
@@ -65,8 +64,31 @@ fn drawMainMenu(canvas: *Canvas, app: *const App) !void {
         960.0,
         540.0,
         24.0,
-        colors.red,
+        colors.panel,
     );
+
+    try canvas.text("STS-Zero", .NotoSans, .{
+        .font_size = 36.0,
+        .width = 960.0,
+        .alignment = .center,
+        .color = colors.text,
+    }, 160.0, 180.0);
+
+    canvas.roundedRect(
+        520.0,
+        340.0,
+        240.0,
+        64.0,
+        14.0,
+        colors.gray,
+    );
+
+    try canvas.text("Start Game", .NotoSans, .{
+        .font_size = 24.0,
+        .width = 240.0,
+        .alignment = .center,
+        .color = colors.white,
+    }, 520.0, 360.0);
 }
 
 // Map scene of the game.
@@ -79,8 +101,31 @@ fn drawMap(canvas: *Canvas, app: *const App) !void {
         960.0,
         540.0,
         24.0,
-        colors.green,
+        colors.panel,
     );
+
+    try canvas.text("Map", .NotoSans, .{
+        .font_size = 36.0,
+        .width = 960.0,
+        .alignment = .center,
+        .color = colors.text,
+    }, 160.0, 180.0);
+
+    canvas.roundedRect(
+        520.0,
+        340.0,
+        240.0,
+        64.0,
+        14.0,
+        colors.gray,
+    );
+
+    try canvas.text("Map here", .NotoSans, .{
+        .font_size = 24.0,
+        .width = 240.0,
+        .alignment = .center,
+        .color = colors.white,
+    }, 520.0, 360.0);
 }
 
 // Combat scene of the game.
@@ -93,6 +138,29 @@ fn drawCombat(canvas: *Canvas, app: *const App) !void {
         960.0,
         540.0,
         24.0,
-        colors.blue,
+        colors.panel,
     );
+
+    try canvas.text("Combat", .NotoSans, .{
+        .font_size = 36.0,
+        .width = 960.0,
+        .alignment = .center,
+        .color = colors.text,
+    }, 160.0, 180.0);
+
+    canvas.roundedRect(
+        520.0,
+        340.0,
+        240.0,
+        64.0,
+        14.0,
+        colors.gray,
+    );
+
+    try canvas.text("Esc to back", .NotoSans, .{
+        .font_size = 24.0,
+        .width = 240.0,
+        .alignment = .center,
+        .color = colors.white,
+    }, 520.0, 360.0);
 }

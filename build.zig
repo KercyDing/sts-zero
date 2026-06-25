@@ -33,6 +33,12 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const font_mod = b.createModule(.{
+        .root_source_file = b.path("src/font.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
@@ -45,6 +51,7 @@ pub fn build(b: *std.Build) void {
             // Mods
             .{ .name = "backend", .module = backend_mod },
             .{ .name = "config", .module = config_mod },
+            .{ .name = "font", .module = font_mod },
         },
     });
     const exe = b.addExecutable(.{
