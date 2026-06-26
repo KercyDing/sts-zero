@@ -53,7 +53,7 @@ pub fn main() !void {
         defer frame_surface.deinit();
 
         const drawable_size = try window.getSizeInPixels();
-        try frame_surface.draw(try draw.buildDisplayList(&app, .{
+        try frame_surface.draw(try draw.buildDisplayList(&app, renderer.context(), .{
             .width = drawable_size[0],
             .height = drawable_size[1],
         }));

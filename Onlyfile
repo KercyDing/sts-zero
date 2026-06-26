@@ -10,6 +10,11 @@ b():
 r():
     zig build run
 
+% Build Metal+Vulkan Shader
+s(name):
+    ./tools/impellerc-linux-x64 --runtime-stage-metal --runtime-stage-vulkan --input=src/assets/shaders/{{name}}.frag --input-type=frag --sl=src/assets/shaders/{{name}}.iplr --spirv=/tmp/sts-zero-{{name}}.spv --iplr --verbose
+    echo 'Done.'
+
 % Test
 t():
     zig build test

@@ -11,6 +11,7 @@ pub const Scene = enum {
 
 pub const App = struct {
     quit: bool = false,
+    time: f32 = 0.0,
     scene: Scene = .main_menu,
 
     input: Input = .{},
@@ -29,6 +30,8 @@ pub const App = struct {
             .map => self.updateMap(dt),
             .combat => self.updateCombat(dt),
         }
+
+        self.time += dt;
     }
 
     fn updateMainMenu(self: *App, dt: f32) void {
